@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bezalel Royal Properties | Luxury Real Estate & Prime Investments</title>
+  
+  <meta name="description" content="Discover verified homes, apartments, land, and developments for sale and rent in Abuja, Lagos, and prime Nigerian locations with Bezalel Royal Properties.">
+  <meta name="keywords" content="Property for Sale in Abuja, Houses for Sale in Abuja, Land for Sale in Abuja, Luxury Homes in Abuja, Real Estate Lagos, Real Estate Nigeria">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS & Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+
+  <!-- Supabase JS Client -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            charcoal: '#111215',
+            darkcard: '#18191E',
+            warmwhite: '#FAF9F6',
+            softbeige: '#F3EFEA',
+            borderbeige: '#E5DFD7',
+            mutedgold: '#C5A059',
+            mutedgoldhover: '#B38F46',
+            emeraldgreen: '#0D3B2E'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FAF9F6;
+      color: #111215;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .serif-heading {
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: -0.01em;
+    }
+    .hero-overlay {
+      background: linear-gradient(180deg, rgba(17, 18, 21, 0.72) 0%, rgba(17, 18, 21, 0.45) 50%, rgba(17, 18, 21, 0.88) 100%);
+    }
+    .modal-backdrop {
+      background: rgba(17, 18, 21, 0.85);
+      backdrop-filter: blur(4px);
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-mutedgold selection:text-white">
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-borderbeige transition-all duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#" onclick="showView('home')" class="flex flex-col leading-none">
+        <span class="serif-heading text-xl sm:text-2xl font-bold tracking-[0.18em] text-charcoal uppercase">BEZALEL</span>
+        <span class="text-[9px] sm:text-[10px] tracking-[0.3em] font-semibold text-mutedgold uppercase mt-0.5">ROYAL PROPERTIES</span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden lg:flex items-center space-x-7 text-xs font-semibold tracking-wider text-charcoal/80 uppercase">
+        <a href="#" onclick="showView('home')" class="hover:text-mutedgold transition-colors">Home</a>
+        <a href="#" onclick="filterAndShowProperties('all')" class="hover:text-mutedgold transition-colors">Properties</a>
+        <a href="#" onclick="filterAndShowProperties('buy')" class="hover:text-mutedgold transition-colors">Buy</a>
+        <a href="#" onclick="filterAndShowProperties('rent')" class="hover:text-mutedgold transition-colors">Rent</a>
+        <a href="#" onclick="filterAndShowProperties('land')" class="hover:text-mutedgold transition-colors">Land</a>
+        <a href="#developments" class="hover:text-mutedgold transition-colors">Developments</a>
+        <a href="#about" class="hover:text-mutedgold transition-colors">About Us</a>
+      </nav>
+
+      <!-- Right Header Actions -->
+      <div class="hidden sm:flex items-center space-x-4">
+        <a href="#inspection" class="text-xs font-semibold tracking-wider text-charcoal hover:text-mutedgold transition-colors uppercase">
+          Contact Us
+        </a>
+        <button onclick="showView('search')" class="bg-charcoal hover:bg-mutedgold text-white text-xs font-semibold tracking-wider uppercase px-5 py-2.5 rounded-sm transition-all duration-200 shadow-sm">
+          Find a Property
+        </button>
+      </div>
+
+      <!-- Mobile Controls -->
+      <div class="flex items-center space-x-2 lg:hidden">
+        <button onclick="showView('search')" class="bg-charcoal text-white text-[11px] font-semibold tracking-wider uppercase px-3 py-1.5 rounded-sm">
+          Find
+        </button>
+        <button onclick="toggleMobileMenu()" class="p-2 text-charcoal hover:text-mutedgold focus:outline-none" aria-label="Toggle navigation menu">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-borderbeige px-6 py-6 space-y-4">
+      <a href="#" onclick="showView('home'); toggleMobileMenu();" class="block text-sm font-semibold tracking-wider text-charcoal uppercase">Home</a>
+      <a href="#" onclick="filterAndShowProperties('all'); toggleMobileMenu();" class="block text-sm font-semibold tracking-wider text-charcoal uppercase">Properties</a>
+      <a href="#" onclick="filterAndShowProperties('buy'); toggleMobileMenu();" class="block text-sm font-semibold tracking-wider text-charcoal uppercase">Buy</a>
+      <a href="#" onclick="filterAndShowProperties('rent'); toggleMobileMenu();" class="block text-sm font-semibold tracking-wider text-charcoal uppercase">Rent</a>
+      <a href="#" onclick="filterAndShowProperties('land'); toggleMobileMenu();" class="block text-sm font-semibold tracking-wider text-charcoal uppercase">Land</a>
+      <a href="#developments" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wider text-charcoal uppercase">Developments</a>
+      <a href="#about" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wider text-charcoal uppercase">About Us</a>
+      <a href="#inspection" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wider text-mutedgold uppercase">Contact Us</a>
+    </div>
+  </header>
+
+  <!-- ==================== HOME VIEW ==================== -->
+  <main id="home-view">
+
+    <!-- HERO SECTION -->
+    <section class="relative min-h-[620px] lg:min-h-[700px] flex items-center justify-center py-16 px-4 sm:px-6">
+      <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=80" 
+             alt="Nigerian Architectural Residence" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 hero-overlay"></div>
+      </div>
+
+      <div class="relative z-10 max-w-4xl mx-auto text-center w-full">
+        <div class="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-6">
+          <span class="w-2 h-2 rounded-full bg-mutedgold"></span>
+          <span id="content-hero_badge" class="text-xs uppercase tracking-widest text-warmwhite font-medium">Strictly Off-Market • Clean Title Guaranteed</span>
+        </div>
+
+        <h1 id="content-hero_headline" class="serif-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-white leading-tight mb-4">
+          Find a Property You’ll Be Proud to Own.
+        </h1>
+        <p id="content-hero_subheadline" class="text-base sm:text-lg text-neutral-200 font-normal max-w-2xl mx-auto mb-10 leading-relaxed">
+          Discover quality homes, land and investment properties in Nigeria.
+        </p>
+
+        <!-- PROPERTY SEARCH ENGINE -->
+        <div class="bg-white rounded-md shadow-2xl p-4 sm:p-6 text-left max-w-3xl mx-auto border border-borderbeige/60">
+          <div class="flex items-center space-x-2 mb-4">
+            <span class="text-xs font-semibold uppercase tracking-wider text-charcoal/60 mr-2">I want to:</span>
+            <button id="hero-btn-buy" onclick="setHeroIntent('buy')" class="px-5 py-2 text-xs font-bold uppercase tracking-wider rounded bg-charcoal text-white transition-all">
+              BUY
+            </button>
+            <button id="hero-btn-rent" onclick="setHeroIntent('rent')" class="px-5 py-2 text-xs font-bold uppercase tracking-wider rounded bg-softbeige text-charcoal hover:bg-neutral-200 transition-all">
+              RENT
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-charcoal/70 mb-1">Location</label>
+              <select id="hero-loc" class="w-full bg-softbeige border border-borderbeige rounded px-3 py-2.5 text-xs text-charcoal focus:outline-none focus:border-mutedgold">
+                <option value="all">Where do you want to live?</option>
+                <option value="Abuja">Abuja</option>
+                <option value="Lagos">Lagos</option>
+                <option value="Port Harcourt">Port Harcourt</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-charcoal/70 mb-1">Property Type</label>
+              <select id="hero-type" class="w-full bg-softbeige border border-borderbeige rounded px-3 py-2.5 text-xs text-charcoal focus:outline-none focus:border-mutedgold">
+                <option value="all">All Types</option>
+                <option value="House">House</option>
+                <option value="Apartment">Apartment</option>
+                <option value="Land">Land</option>
+                <option value="Commercial">Commercial</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-charcoal/70 mb-1">Budget</label>
+              <select id="hero-budget" class="w-full bg-softbeige border border-borderbeige rounded px-3 py-2.5 text-xs text-charcoal focus:outline-none focus:border-mutedgold">
+                <option value="all">What's your budget?</option>
+                <option value="under100m">Under ₦100 Million</option>
+                <option value="100m-300m">₦100M - ₦300 Million</option>
+                <option value="above300m">Above ₦300 Million</option>
+              </select>
+            </div>
+          </div>
+
+          <button onclick="executeHeroSearch()" class="w-full py-3.5 bg-charcoal hover:bg-mutedgold text-white text-xs sm:text-sm font-bold uppercase tracking-widest rounded transition-all duration-200 flex items-center justify-center space-x-2">
+            <i data-lucide="search" class="w-4 h-4"></i>
+            <span>Search Properties</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRUST BAR -->
+    <section class="bg-white border-y border-borderbeige py-8 px-4 sm:px-6">
+      <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div class="flex flex-col items-center">
+          <div class="w-10 h-10 rounded-full bg-softbeige flex items-center justify-center text-mutedgold mb-2.5">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <h4 id="content-trust_title_1" class="text-xs sm:text-sm font-bold uppercase tracking-wider text-charcoal">Verified Properties</h4>
+          <p id="content-trust_sub_1" class="text-[11px] text-neutral-500 mt-0.5">Documents & titles checked</p>
+        </div>
+
+        <div class="flex flex-col items-center">
+          <div class="w-10 h-10 rounded-full bg-softbeige flex items-center justify-center text-mutedgold mb-2.5">
+            <i data-lucide="user-check" class="w-5 h-5"></i>
+          </div>
+          <h4 id="content-trust_title_2" class="text-xs sm:text-sm font-bold uppercase tracking-wider text-charcoal">Trusted Professionals</h4>
+          <p id="content-trust_sub_2" class="text-[11px] text-neutral-500 mt-0.5">Licensed, straightforward advisors</p>
+        </div>
+
+        <div class="flex flex-col items-center">
+          <div class="w-10 h-10 rounded-full bg-softbeige flex items-center justify-center text-mutedgold mb-2.5">
+            <i data-lucide="file-text" class="w-5 h-5"></i>
+          </div>
+          <h4 id="content-trust_title_3" class="text-xs sm:text-sm font-bold uppercase tracking-wider text-charcoal">Clear Property Info</h4>
+          <p id="content-trust_sub_3" class="text-[11px] text-neutral-500 mt-0.5">Exact prices and true details</p>
+        </div>
+
+        <div class="flex flex-col items-center">
+          <div class="w-10 h-10 rounded-full bg-softbeige flex items-center justify-center text-mutedgold mb-2.5">
+            <i data-lucide="calendar" class="w-5 h-5"></i>
+          </div>
+          <h4 id="content-trust_title_4" class="text-xs sm:text-sm font-bold uppercase tracking-wider text-charcoal">Easy Viewing</h4>
+          <p id="content-trust_sub_4" class="text-[11px] text-neutral-500 mt-0.5">Schedule private physical tours</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED PROPERTIES -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-12">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-[0.2em] text-mutedgold">Curated Collection</span>
+          <h2 class="serif-heading text-3xl sm:text-4xl lg:text-5xl font-semibold text-charcoal mt-1">Featured Properties</h2>
+          <p class="text-sm text-neutral-500 mt-1">Take a look at some of our available properties.</p>
+        </div>
+        <button onclick="showView('search')" class="mt-4 sm:mt-0 inline-flex items-center space-x-1.5 text-xs font-bold uppercase tracking-wider text-charcoal hover:text-mutedgold transition-colors">
+          <span>View All Properties</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div id="featured-properties-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      </div>
+    </section>
+
+    <!-- PROPERTY TYPES -->
+    <section class="bg-softbeige/60 py-20 px-4 sm:px-6 lg:px-8 border-y border-borderbeige">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <span class="text-xs font-bold uppercase tracking-[0.2em] text-mutedgold">Categories</span>
+          <h2 class="serif-heading text-3xl sm:text-4xl font-semibold text-charcoal mt-1">What Are You Looking For?</h2>
+          <p class="text-xs sm:text-sm text-neutral-600 mt-1">Simple options tailored to your family, business, or investment goals.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="bg-white p-6 rounded border border-borderbeige hover:border-mutedgold transition-all duration-200 flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 rounded bg-softbeige flex items-center justify-center text-charcoal mb-4">
+                <i data-lucide="home" class="w-6 h-6"></i>
+              </div>
+              <h3 class="serif-heading text-2xl font-semibold text-charcoal mb-1">HOMES</h3>
+              <p class="text-xs text-neutral-600 leading-relaxed">Find a place for you and your family.</p>
+            </div>
+            <button onclick="filterByType('House')" class="mt-6 text-xs font-bold uppercase tracking-wider text-mutedgold hover:text-charcoal flex items-center space-x-1">
+              <span>Explore Homes &rarr;</span>
+            </button>
+          </div>
+
+          <div class="bg-white p-6 rounded border border-borderbeige hover:border-mutedgold transition-all duration-200 flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 rounded bg-softbeige flex items-center justify-center text-charcoal mb-4">
+                <i data-lucide="building" class="w-6 h-6"></i>
+              </div>
+              <h3 class="serif-heading text-2xl font-semibold text-charcoal mb-1">APARTMENTS</h3>
+              <p class="text-xs text-neutral-600 leading-relaxed">Discover comfortable apartments in great locations.</p>
+            </div>
+            <button onclick="filterByType('Apartment')" class="mt-6 text-xs font-bold uppercase tracking-wider text-mutedgold hover:text-charcoal flex items-center space-x-1">
+              <span>Explore Apartments &rarr;</span>
+            </button>
+          </div>
+
+          <div class="bg-white p-6 rounded border border-borderbeige hover:border-mutedgold transition-all duration-200 flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 rounded bg-softbeige flex items-center justify-center text-charcoal mb-4">
+                <i data-lucide="map" class="w-6 h-6"></i>
+              </div>
+              <h3 class="serif-heading text-2xl font-semibold text-charcoal mb-1">LAND</h3>
+              <p class="text-xs text-neutral-600 leading-relaxed">Find land for your next home or investment.</p>
+            </div>
+            <button onclick="filterByType('Land')" class="mt-6 text-xs font-bold uppercase tracking-wider text-mutedgold hover:text-charcoal flex items-center space-x-1">
+              <span>Explore Land &rarr;</span>
+            </button>
+          </div>
+
+          <div class="bg-white p-6 rounded border border-borderbeige hover:border-mutedgold transition-all duration-200 flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 rounded bg-softbeige flex items-center justify-center text-charcoal mb-4">
+                <i data-lucide="briefcase" class="w-6 h-6"></i>
+              </div>
+              <h3 class="serif-heading text-2xl font-semibold text-charcoal mb-1">COMMERCIAL</h3>
+              <p class="text-xs text-neutral-600 leading-relaxed">Find a space for your business.</p>
+            </div>
+            <button onclick="filterByType('Commercial')" class="mt-6 text-xs font-bold uppercase tracking-wider text-mutedgold hover:text-charcoal flex items-center space-x-1">
+              <span>Explore Commercial &rarr;</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPLORE LOCATIONS -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="text-xs font-bold uppercase tracking-[0.2em] text-mutedgold">Geographic Focus</span>
+        <h2 class="serif-heading text-3xl sm:text-4xl font-semibold text-charcoal mt-1">Explore Properties by Location</h2>
+        <p class="text-xs sm:text-sm text-neutral-500 mt-1">Prime cities where Bezalel Royal Properties operates.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div onclick="filterByLocation('Abuja')" class="group relative rounded overflow-hidden aspect-[4/3] cursor-pointer shadow-md">
+          <img src="https://images.unsplash.com/photo-1541888946425-d0fbb186f5f7?auto=format&fit=crop&w=800&q=80" 
+               alt="Abuja Luxury Properties" 
+               class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/40 to-transparent"></div>
+          <div class="absolute bottom-6 left-6 right-6">
+            <span class="text-[10px] uppercase tracking-widest text-mutedgold font-bold">Federal Capital Territory</span>
+            <h3 class="serif-heading text-3xl font-semibold text-white">Abuja</h3>
+            <p class="text-xs text-neutral-300 mt-1">Maitama, Guzape, Asokoro & Wuse 2</p>
+            <span class="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-white group-hover:text-mutedgold transition-colors mt-3">
+              <span>Explore Abuja &rarr;</span>
+            </span>
+          </div>
+        </div>
+
+        <div onclick="filterByLocation('Lagos')" class="group relative rounded overflow-hidden aspect-[4/3] cursor-pointer shadow-md">
+          <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" 
+               alt="Lagos Waterfront" 
+               class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/40 to-transparent"></div>
+          <div class="absolute bottom-6 left-6 right-6">
+            <span class="text-[10px] uppercase tracking-widest text-mutedgold font-bold">Commercial Capital</span>
+            <h3 class="serif-heading text-3xl font-semibold text-white">Lagos</h3>
+            <p class="text-xs text-neutral-300 mt-1">Ikoyi, Victoria Island & Lekki Phase 1</p>
+            <span class="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-white group-hover:text-mutedgold transition-colors mt-3">
+              <span>Explore Lagos &rarr;</span>
+            </span>
+          </div>
+        </div>
+
+        <div onclick="filterByLocation('Port Harcourt')" class="group relative rounded overflow-hidden aspect-[4/3] cursor-pointer shadow-md">
+          <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80" 
+               alt="Port Harcourt Prime Estates" 
+               class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/40 to-transparent"></div>
+          <div class="absolute bottom-6 left-6 right-6">
+            <span class="text-[10px] uppercase tracking-widest text-mutedgold font-bold">Rivers State</span>
+            <h3 class="serif-heading text-3xl font-semibold text-white">Port Harcourt</h3>
+            <p class="text-xs text-neutral-300 mt-1">GRA Phases 1-3 & Peter Odili Corridor</p>
+            <span class="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-white group-hover:text-mutedgold transition-colors mt-3">
+              <span>Explore Port Harcourt &rarr;</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEVELOPMENTS -->
+    <section id="developments" class="py-20 bg-charcoal text-white px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <span class="text-xs font-bold uppercase tracking-[0.2em] text-mutedgold">Direct Developer Releases</span>
+          <h2 class="serif-heading text-3xl sm:text-4xl lg:text-5xl font-semibold mt-1">Our Latest Developments</h2>
+          <p class="text-xs sm:text-sm text-neutral-400 mt-1">Planned residential communities and investment layouts.</p>
+        </div>
+
+        <div class="bg-darkcard border border-white/10 rounded-lg overflow-hidden grid grid-cols-1 lg:grid-cols-12 max-w-5xl mx-auto">
+          <div class="lg:col-span-7 relative min-h-[300px] lg:min-h-[420px]">
+            <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80" 
+                 alt="Royal Gardens Development Abuja" 
+                 class="w-full h-full object-cover">
+            <span class="absolute top-4 left-4 bg-black/80 px-3 py-1 text-[10px] uppercase tracking-widest text-mutedgold font-bold rounded">
+              Phase 1 Underway
+            </span>
+          </div>
+
+          <div class="lg:col-span-5 p-8 sm:p-10 flex flex-col justify-between">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-mutedgold">Flagship Development</span>
+              <h3 class="serif-heading text-3xl font-semibold text-white mt-1 mb-2">Royal Gardens</h3>
+              <p class="text-xs text-neutral-400 mb-6 flex items-center space-x-1">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-mutedgold"></i>
+                <span>Abuja, Nigeria &bull; Residential plots and homes</span>
+              </p>
+
+              <p class="text-xs sm:text-sm text-neutral-300 leading-relaxed mb-6">
+                A master-planned private community combining paved dual carriage access, underground drainage, perimeter surveillance, and dedicated electrical infrastructure.
+              </p>
+
+              <div class="grid grid-cols-2 gap-4 border-y border-white/10 py-4 mb-6 text-left">
+                <div>
+                  <span class="text-[10px] uppercase text-neutral-400">Available Plots</span>
+                  <p class="text-sm font-semibold text-white">500 & 800 sqm</p>
+                </div>
+                <div>
+                  <span class="text-[10px] uppercase text-neutral-400">Title Document</span>
+                  <p class="text-sm font-semibold text-white">Federal C of O</p>
+                </div>
+              </div>
+            </div>
+
+            <a id="development-wa-btn" href="https://wa.me/2347062949052?text=Hello%20Bezalel%20Royal%20Properties,%20I%20am%20interested%20in%20the%20Royal%20Gardens%20development%20in%20Abuja." 
+               target="_blank"
+               class="w-full text-center py-3.5 bg-mutedgold hover:bg-mutedgoldhover text-charcoal text-xs font-bold uppercase tracking-widest rounded transition-all">
+              Explore Development Brochure
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY BEZALEL -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="text-xs font-bold uppercase tracking-[0.2em] text-mutedgold">Our Standard</span>
+        <h2 class="serif-heading text-3xl sm:text-4xl font-semibold text-charcoal mt-1">Why Bezalel Royal Properties</h2>
+        <p class="text-xs sm:text-sm text-neutral-500 mt-1">Straightforward real estate built around long-term security.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="p-6 bg-white border border-borderbeige rounded shadow-sm text-left">
+          <div class="w-10 h-10 rounded-full bg-softbeige flex items-center justify-center text-mutedgold mb-4">
+            <i data-lucide="check-circle" class="w-5 h-5"></i>
+          </div>
+          <h3 class="serif-heading text-xl font-bold text-charcoal mb-2">QUALITY</h3>
+          <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+            “We focus on properties that meet clear standards.”
+          </p>
+        </div>
+
+        <div class="p-6 bg-white border border-borderbeige rounded shadow-sm text-left">
+          <div class="w-10 h-10 rounded-full bg-softbeige flex items-center justify-center text-mutedgold mb-4">
+            <i data-lucide="shield" class="w-5 h-5"></i>
+          </div>
+          <h3 class="serif-heading text-xl font-bold text-charcoal mb-2">TRUST</h3>
+          <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+            “Get clear information before you make a decision.”
+          </p>
+        </div>
+
+        <div class="p-6 bg-white border border-borderbeige rounded shadow-sm text-left">
+          <div class="w-10 h-10 rounded-full bg-softbeige flex items-center justify-center text-mutedgold mb-4">
+            <i data-lucide="compass" class="w-5 h-5"></i>
+          </div>
+          <h3 class="serif-heading text-xl font-bold text-charcoal mb-2">EXPERIENCE</h3>
+          <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+            “Work with people who understand the property market.”
+          </p>
+        </div>
+
+        <div class="p-6 bg-white border border-borderbeige rounded shadow-sm text-left">
+          <div class="w-10 h-10 rounded-full bg-softbeige flex items-center justify-center text-mutedgold mb-4">
+            <i data-lucide="life-buoy" class="w-5 h-5"></i>
+          </div>
+          <h3 class="serif-heading text-xl font-bold text-charcoal mb-2">SUPPORT</h3>
+          <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+            “We stay with you from your first enquiry to your property journey.”
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="py-20 bg-softbeige/50 border-y border-borderbeige px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <span class="text-xs font-bold uppercase tracking-[0.2em] text-mutedgold">Step-by-Step</span>
+          <h2 class="serif-heading text-3xl sm:text-4xl font-semibold text-charcoal mt-1">Finding Your Property Is Easy</h2>
+          <p class="text-xs sm:text-sm text-neutral-600 mt-1">Four simple steps from first search to key handover.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="relative bg-white p-6 rounded border border-borderbeige">
+            <span class="serif-heading text-4xl font-bold text-mutedgold/40 block mb-2">01</span>
+            <div class="flex items-center space-x-2 mb-2">
+              <i data-lucide="search" class="w-4 h-4 text-charcoal"></i>
+              <h4 class="text-sm font-bold uppercase tracking-wider text-charcoal">Search</h4>
+            </div>
+            <p class="text-xs text-neutral-600 leading-relaxed">Tell us what you want.</p>
+          </div>
+
+          <div class="relative bg-white p-6 rounded border border-borderbeige">
+            <span class="serif-heading text-4xl font-bold text-mutedgold/40 block mb-2">02</span>
+            <div class="flex items-center space-x-2 mb-2">
+              <i data-lucide="heart" class="w-4 h-4 text-charcoal"></i>
+              <h4 class="text-sm font-bold uppercase tracking-wider text-charcoal">Choose</h4>
+            </div>
+            <p class="text-xs text-neutral-600 leading-relaxed">Look through properties you like.</p>
+          </div>
+
+          <div class="relative bg-white p-6 rounded border border-borderbeige">
+            <span class="serif-heading text-4xl font-bold text-mutedgold/40 block mb-2">03</span>
+            <div class="flex items-center space-x-2 mb-2">
+              <i data-lucide="eye" class="w-4 h-4 text-charcoal"></i>
+              <h4 class="text-sm font-bold uppercase tracking-wider text-charcoal">Inspect</h4>
+            </div>
+            <p class="text-xs text-neutral-600 leading-relaxed">Visit the property and see it for yourself.</p>
+          </div>
+
+          <div class="relative bg-white p-6 rounded border border-borderbeige">
+            <span class="serif-heading text-4xl font-bold text-mutedgold/40 block mb-2">04</span>
+            <div class="flex items-center space-x-2 mb-2">
+              <i data-lucide="key" class="w-4 h-4 text-charcoal"></i>
+              <h4 class="text-sm font-bold uppercase tracking-wider text-charcoal">Buy or Rent</h4>
+            </div>
+            <p class="text-xs text-neutral-600 leading-relaxed">Get the help you need to complete the process.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INSPECTION BOOKING SECTION -->
+    <section id="inspection" class="py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+      <div class="bg-white rounded-lg border border-borderbeige shadow-xl p-8 sm:p-12 text-center">
+        <span class="text-xs font-bold uppercase tracking-[0.2em] text-mutedgold">Private Viewing</span>
+        <h2 class="serif-heading text-3xl sm:text-4xl font-semibold text-charcoal mt-1 mb-2">Want to See It Yourself?</h2>
+        <p class="text-xs sm:text-sm text-neutral-600 max-w-md mx-auto mb-8">
+          Book a property inspection and let us show you around.
+        </p>
+
+        <form id="inspection-form" onsubmit="handleInspectionSubmit(event)" class="space-y-4 max-w-lg mx-auto text-left">
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-charcoal/70 mb-1">Your Name</label>
+            <input type="text" id="insp-name" required placeholder="Enter your full name" 
+                   class="w-full bg-softbeige border border-borderbeige rounded px-3 py-2.5 text-xs text-charcoal focus:outline-none focus:border-mutedgold">
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-charcoal/70 mb-1">Phone / WhatsApp</label>
+            <input type="tel" id="insp-phone" required placeholder="e.g. 0706 294 9052" 
+                   class="w-full bg-softbeige border border-borderbeige rounded px-3 py-2.5 text-xs text-charcoal focus:outline-none focus:border-mutedgold">
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-charcoal/70 mb-1">Property</label>
+            <input type="text" id="insp-property" required placeholder="e.g. 5 Bed Duplex in Maitama, or Royal Gardens" 
+                   class="w-full bg-softbeige border border-borderbeige rounded px-3 py-2.5 text-xs text-charcoal focus:outline-none focus:border-mutedgold">
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-charcoal/70 mb-1">Preferred Date</label>
+              <input type="date" id="insp-date" required 
+                     class="w-full bg-softbeige border border-borderbeige rounded px-3 py-2.5 text-xs text-charcoal focus:outline-none focus:border-mutedgold">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-charcoal/70 mb-1">Preferred Time</label>
+              <select id="insp-time" required class="w-full bg-softbeige border border-borderbeige rounded px-3 py-2.5 text-xs text-charcoal focus:outline-none focus:border-mutedgold">
+                <option value="Morning (9am - 12pm)">Morning (9am - 12pm)</option>
+                <option value="Afternoon (12pm - 3pm)">Afternoon (12pm - 3pm)</option>
+                <option value="Evening (3pm - 6pm)">Evening (3pm - 6pm)</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-charcoal/70 mb-1">Message (Optional)</label>
+            <textarea id="insp-msg" rows="3" placeholder="Any specific requirements or questions..." 
+                      class="w-full bg-softbeige border border-borderbeige rounded px-3 py-2.5 text-xs text-charcoal focus:outline-none focus:border-mutedgold"></textarea>
+          </div>
+
+          <button type="submit" class="w-full py-4 bg-charcoal hover:bg-mutedgold text-white text-xs font-bold uppercase tracking-widest rounded transition-all duration-200 mt-2 shadow-md">
+            Book an Inspection
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="py-20 bg-white border-t border-borderbeige px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div class="lg:col-span-6">
+            <span class="text-xs font-bold uppercase tracking-[0.2em] text-mutedgold">About Us</span>
+            <h2 id="content-about_headline" class="serif-heading text-3xl sm:text-4xl lg:text-5xl font-semibold text-charcoal mt-1 mb-6">
+              Property. Trust. People.
+            </h2>
+            <div class="space-y-4 text-xs sm:text-sm text-neutral-600 leading-relaxed">
+              <p id="content-about_paragraph_1">
+                Bezalel Royal Properties is an indigenous Nigerian real estate firm dedicated to simplifying property acquisition, renting, and development. We operate on a singular conviction: buying or renting a property in Nigeria should be clear, safe, and free from misleading claims.
+              </p>
+              <p id="content-about_paragraph_2">
+                Whether assisting families in acquiring their primary residence or supporting institutional investors with titled land allocations, we verify titles, confirm planning consents, and provide honest on-ground assessments.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mt-8 pt-8 border-t border-borderbeige">
+              <div>
+                <h4 class="text-xs font-bold uppercase tracking-wider text-charcoal mb-1">Our Mission</h4>
+                <p id="content-about_mission" class="text-xs text-neutral-500">To make authentic Nigerian real estate accessible with total clarity.</p>
+              </div>
+              <div>
+                <h4 class="text-xs font-bold uppercase tracking-wider text-charcoal mb-1">Areas Served</h4>
+                <p id="content-about_areas" class="text-xs text-neutral-500">Abuja, Lagos State, and Port Harcourt metropolitan corridors.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-6 relative">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80" 
+                 alt="Residential Standard" 
+                 class="w-full h-[400px] object-cover rounded shadow-lg">
+            <div class="absolute -bottom-6 -left-6 bg-charcoal text-white p-6 rounded shadow-xl hidden sm:block max-w-xs border border-white/10">
+              <p class="serif-heading text-2xl font-bold text-mutedgold">Verified Titles Only</p>
+              <p class="text-xs text-neutral-300 mt-1">No disputed lands. No unapproved developments.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MEET THE TEAM -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="text-xs font-bold uppercase tracking-[0.2em] text-mutedgold">Leadership</span>
+        <h2 class="serif-heading text-3xl sm:text-4xl font-semibold text-charcoal mt-1">Meet Our Team</h2>
+        <p class="text-xs sm:text-sm text-neutral-500 mt-1">Real professionals dedicated to your property journey.</p>
+      </div>
+
+      <div id="team-members-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      </div>
+    </section>
+
+    <!-- CUSTOMER STORIES -->
+    <section class="py-20 bg-softbeige/50 border-y border-borderbeige px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <span class="text-xs font-bold uppercase tracking-[0.2em] text-mutedgold">Client Feedback</span>
+          <h2 class="serif-heading text-3xl sm:text-4xl font-semibold text-charcoal mt-1">What Our Clients Say</h2>
+          <p class="text-xs sm:text-sm text-neutral-600 mt-1">Genuine experiences from individuals and organizations we have served.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-white p-8 rounded border border-borderbeige shadow-sm flex flex-col justify-between">
+            <p class="text-xs sm:text-sm text-neutral-700 leading-relaxed italic mb-6">
+              “Viewing the duplex in Maitama was organized within hours of my request. No exaggerated claims, and the title verification process was completely transparent.”
+            </p>
+            <div class="border-t border-borderbeige pt-4">
+              <p class="text-xs font-bold uppercase tracking-wider text-charcoal">Verified Purchaser</p>
+              <p class="text-[11px] text-mutedgold">Residential Duplex, Maitama (Abuja)</p>
+            </div>
+          </div>
+
+          <div class="bg-white p-8 rounded border border-borderbeige shadow-sm flex flex-col justify-between">
+            <p class="text-xs sm:text-sm text-neutral-700 leading-relaxed italic mb-6">
+              “As someone living outside Nigeria, finding someone trustworthy to handle site inspections in Lagos was my biggest worry. Bezalel Royal Properties delivered step-by-step video walk-throughs and clear contracts.”
+            </p>
+            <div class="border-t border-borderbeige pt-4">
+              <p class="text-xs font-bold uppercase tracking-wider text-charcoal">Diaspora Client</p>
+              <p class="text-[11px] text-mutedgold">Apartment Acquisition, Ikoyi (Lagos)</p>
+            </div>
+          </div>
+
+          <div class="bg-white p-8 rounded border border-borderbeige shadow-sm flex flex-col justify-between">
+            <p class="text-xs sm:text-sm text-neutral-700 leading-relaxed italic mb-6">
+              “We acquired commercial plots through their team in Guzape. Everything from zoning approvals to surveyor beaconing was exactly as described.”
+            </p>
+            <div class="border-t border-borderbeige pt-4">
+              <p class="text-xs font-bold uppercase tracking-wider text-charcoal">Corporate Investor</p>
+              <p class="text-[11px] text-mutedgold">Commercial Land Allocation, Guzape (Abuja)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="text-xs font-bold uppercase tracking-[0.2em] text-mutedgold">Common Questions</span>
+        <h2 class="serif-heading text-3xl sm:text-4xl font-semibold text-charcoal mt-1">Frequently Asked Questions</h2>
+        <p class="text-xs sm:text-sm text-neutral-500 mt-1">Clear answers to help you navigate property transactions in Nigeria.</p>
+      </div>
+
+      <div class="space-y-4">
+        <div class="bg-white border border-borderbeige rounded p-5">
+          <h3 class="text-sm font-bold text-charcoal mb-2">How do I view a property?</h3>
+          <p class="text-xs text-neutral-600 leading-relaxed">
+            Click "Book an Inspection" on any listing or reach us directly on WhatsApp. We schedule physical tours Mondays through Saturdays at your convenience.
+          </p>
+        </div>
+
+        <div class="bg-white border border-borderbeige rounded p-5">
+          <h3 class="text-sm font-bold text-charcoal mb-2">Can I buy property from another city or abroad?</h3>
+          <p class="text-xs text-neutral-600 leading-relaxed">
+            Yes. Many of our clients reside outside Nigeria. We provide high-definition live video walkthroughs, digital dossiers, and courier original deeds upon legal execution.
+          </p>
+        </div>
+
+        <div class="bg-white border border-borderbeige rounded p-5">
+          <h3 class="text-sm font-bold text-charcoal mb-2">Can I pay in instalments?</h3>
+          <p class="text-xs text-neutral-600 leading-relaxed">
+            Selected properties and our direct developments (such as Royal Gardens) offer milestone-based payment schedules. Individual resale properties are subject to vendor terms.
+          </p>
+        </div>
+
+        <div class="bg-white border border-borderbeige rounded p-5">
+          <h3 class="text-sm font-bold text-charcoal mb-2">What documents should I check before buying land?</h3>
+          <p class="text-xs text-neutral-600 leading-relaxed">
+            Key documents include the Certificate of Occupancy (C of O), Governor's Consent, Registered Survey Plan, and Deed of Assignment. We recommend independent legal verification of every title.
+          </p>
+        </div>
+
+        <div class="bg-white border border-borderbeige rounded p-5">
+          <h3 class="text-sm font-bold text-charcoal mb-2">Where does Bezalel Royal Properties operate?</h3>
+          <p class="text-xs text-neutral-600 leading-relaxed">
+            Our active core portfolio focuses on Abuja (FCT), Lagos State, and Port Harcourt (Rivers State).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CALL TO ACTION -->
+    <section class="relative py-28 px-4 sm:px-6 text-center text-white">
+      <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2000&q=80" 
+             alt="Luxury Residence Exterior" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-charcoal/80"></div>
+      </div>
+
+      <div class="relative z-10 max-w-3xl mx-auto">
+        <h2 class="serif-heading text-4xl sm:text-5xl font-semibold mb-4">
+          Your Next Property Starts Here.
+        </h2>
+        <p class="text-sm sm:text-base text-neutral-300 max-w-xl mx-auto mb-8 leading-relaxed">
+          Tell us what you are looking for and let’s help you find it.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button onclick="showView('search')" class="w-full sm:w-auto px-8 py-3.5 bg-mutedgold hover:bg-mutedgoldhover text-charcoal text-xs font-bold uppercase tracking-widest rounded transition-all">
+            Find a Property
+          </button>
+          <a id="cta-talk-btn" href="https://wa.me/2347062949052?text=Hello%20Bezalel%20Royal%20Properties,%20I%20would%20like%20to%20speak%20with%20an%20advisor." 
+             target="_blank"
+             class="w-full sm:w-auto px-8 py-3.5 border border-white/40 hover:border-white text-white text-xs font-bold uppercase tracking-widest rounded transition-all">
+            Talk to Us
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== SEARCH PAGE VIEW ==================== -->
+  <main id="search-view" class="hidden py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="mb-6 flex items-center justify-between">
+      <button onclick="showView('home')" class="inline-flex items-center space-x-1.5 text-xs font-bold uppercase tracking-wider text-charcoal hover:text-mutedgold transition-colors">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        <span>Back to Home</span>
+      </button>
+      <span class="text-xs text-neutral-500 uppercase tracking-wider">Property Search Catalog</span>
+    </div>
+
+    <div class="border-b border-borderbeige pb-6 mb-8">
+      <h1 class="serif-heading text-3xl sm:text-5xl font-semibold text-charcoal">Find Your Next Property</h1>
+      <p class="text-xs sm:text-sm text-neutral-500 mt-1">Filter by status, location, size, and category.</p>
+    </div>
+
+    <div class="bg-white rounded border border-borderbeige p-6 mb-8 shadow-sm">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div>
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-charcoal/70 mb-1">Status</label>
+          <select id="filter-intent" onchange="applyFilters()" class="w-full bg-softbeige border border-borderbeige rounded px-3 py-2 text-xs text-charcoal focus:outline-none focus:border-mutedgold">
+            <option value="all">Buy / Rent (All)</option>
+            <option value="FOR SALE">For Sale</option>
+            <option value="FOR RENT">For Rent</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-charcoal/70 mb-1">Location</label>
+          <select id="filter-location" onchange="applyFilters()" class="w-full bg-softbeige border border-borderbeige rounded px-3 py-2 text-xs text-charcoal focus:outline-none focus:border-mutedgold">
+            <option value="all">All Locations</option>
+            <option value="Abuja">Abuja</option>
+            <option value="Lagos">Lagos</option>
+            <option value="Port Harcourt">Port Harcourt</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-charcoal/70 mb-1">Property Type</label>
+          <select id="filter-type" onchange="applyFilters()" class="w-full bg-softbeige border border-borderbeige rounded px-3 py-2 text-xs text-charcoal focus:outline-none focus:border-mutedgold">
+            <option value="all">All Types</option>
+            <option value="House">House</option>
+            <option value="Apartment">Apartment</option>
+            <option value="Land">Land</option>
+            <option value="Commercial">Commercial</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-charcoal/70 mb-1">Bedrooms</label>
+          <select id="filter-beds" onchange="applyFilters()" class="w-full bg-softbeige border border-borderbeige rounded px-3 py-2 text-xs text-charcoal focus:outline-none focus:border-mutedgold">
+            <option value="all">Any Bedrooms</option>
+            <option value="3">3+ Bedrooms</option>
+            <option value="4">4+ Bedrooms</option>
+            <option value="5">5+ Bedrooms</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-4 border-t border-borderbeige flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center space-x-2 text-xs text-neutral-600">
+          <span>Sort by:</span>
+          <button onclick="sortProperties('newest')" class="hover:text-charcoal font-semibold underline">Newest</button>
+          <span>&bull;</span>
+          <button onclick="sortProperties('price-low')" class="hover:text-charcoal font-semibold">Price (Low to High)</button>
+          <span>&bull;</span>
+          <button onclick="sortProperties('price-high')" class="hover:text-charcoal font-semibold">Price (High to Low)</button>
+        </div>
+
+        <button onclick="resetFilters()" class="text-xs text-neutral-500 hover:text-charcoal underline">
+          Reset All Filters
+        </button>
+      </div>
+    </div>
+
+    <div id="search-results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    </div>
+    
+    <div id="no-results" class="hidden text-center py-16 bg-white rounded border border-borderbeige">
+      <p class="serif-heading text-2xl font-semibold text-charcoal">No properties match your current filters.</p>
+      <p class="text-xs text-neutral-500 mt-1">Try resetting the filters or speak with an advisor for off-market units.</p>
+      <button onclick="resetFilters()" class="mt-4 px-5 py-2 bg-charcoal text-white text-xs font-bold uppercase tracking-wider rounded">
+        Reset Filters
+      </button>
+    </div>
+  </main>
+
+  <!-- ==================== PROPERTY DETAILS MODAL ==================== -->
+  <div id="property-modal" class="fixed inset-0 z-50 hidden overflow-y-auto modal-backdrop p-4 sm:p-6 lg:p-10 flex items-center justify-center">
+    <div class="bg-white rounded-lg max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-borderbeige text-left relative">
+      <button onclick="closePropertyModal()" class="absolute top-4 right-4 z-20 bg-charcoal/80 hover:bg-charcoal text-white w-9 h-9 rounded-full flex items-center justify-center transition-all">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div id="modal-content" class="p-6 sm:p-8">
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FLOATING WHATSAPP BUTTON ==================== -->
+  <a id="floating-whatsapp" 
+     href="https://wa.me/2347062949052?text=Hello%20Bezalel%20Royal%20Properties,%20I%20am%20interested%20in%20learning%20more%20about%20your%20properties." 
+     target="_blank" 
+     rel="noopener noreferrer"
+     class="fixed bottom-6 right-6 z-40 bg-[#25D366] text-black font-bold text-xs uppercase tracking-wider px-4 py-3.5 rounded-full shadow-2xl flex items-center space-x-2 hover:scale-105 transition-all">
+    <i data-lucide="message-circle" class="w-5 h-5 text-black"></i>
+    <span class="hidden sm:inline">WhatsApp Us</span>
+  </a>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-charcoal text-white pt-16 pb-12 border-t border-white/10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-white/10">
+      
+      <div class="lg:col-span-2">
+        <a href="#" onclick="showView('home')" class="flex flex-col leading-none mb-3">
+          <span class="serif-heading text-2xl font-bold tracking-[0.18em] text-white uppercase">BEZALEL</span>
+          <span class="text-[10px] tracking-[0.3em] font-semibold text-mutedgold uppercase mt-0.5">ROYAL PROPERTIES</span>
+        </a>
+        <p class="text-xs text-neutral-400 max-w-sm leading-relaxed mb-6">
+          Helping people find quality properties in Nigeria with verified titles, straightforward pricing, and dedicated legal representation.
+        </p>
+        <div class="flex items-center space-x-3 text-neutral-400">
+          <a href="#" class="w-8 h-8 rounded-full bg-darkcard flex items-center justify-center hover:text-mutedgold transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full bg-darkcard flex items-center justify-center hover:text-mutedgold transition-colors"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full bg-darkcard flex items-center justify-center hover:text-mutedgold transition-colors"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="text-xs font-bold uppercase tracking-wider text-mutedgold mb-4">Properties</h4>
+        <ul class="space-y-2 text-xs text-neutral-300">
+          <li><a href="#" onclick="filterAndShowProperties('buy')" class="hover:text-white transition-colors">Buy</a></li>
+          <li><a href="#" onclick="filterAndShowProperties('rent')" class="hover:text-white transition-colors">Rent</a></li>
+          <li><a href="#" onclick="filterAndShowProperties('land')" class="hover:text-white transition-colors">Land</a></li>
+          <li><a href="#" onclick="filterByType('Commercial')" class="hover:text-white transition-colors">Commercial</a></li>
+          <li><a href="#developments" class="hover:text-white transition-colors">Developments</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-xs font-bold uppercase tracking-wider text-mutedgold mb-4">Company</h4>
+        <ul class="space-y-2 text-xs text-neutral-300">
+          <li><a href="#about" class="hover:text-white transition-colors">About Us</a></li>
+          <li><a href="#about" class="hover:text-white transition-colors">Our Team</a></li>
+          <li><a href="#inspection" class="hover:text-white transition-colors">Contact</a></li>
+          <li><a href="mailto:advisory@bezalelroyal.ng" class="hover:text-white transition-colors">Careers</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-xs font-bold uppercase tracking-wider text-mutedgold mb-4">Contact</h4>
+        <ul class="space-y-2 text-xs text-neutral-300">
+          <li class="flex items-center space-x-2">
+            <i data-lucide="phone" class="w-3.5 h-3.5 text-mutedgold"></i>
+            <span id="footer-phone">+234 706 294 9052</span>
+          </li>
+          <li class="flex items-center space-x-2">
+            <i data-lucide="message-square" class="w-3.5 h-3.5 text-mutedgold"></i>
+            <span>WhatsApp Available</span>
+          </li>
+          <li class="flex items-center space-x-2">
+            <i data-lucide="mail" class="w-3.5 h-3.5 text-mutedgold"></i>
+            <span id="footer-email">advisory@bezalelroyal.ng</span>
+          </li>
+          <li id="footer-address" class="pt-2 text-neutral-400 leading-normal">
+            Maitama / Central Business District, Abuja, Nigeria
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="max-w-7xl mx-auto pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-500">
+      <p>&copy; 2026 Bezalel Royal Properties. All rights reserved.</p>
+      <div class="flex items-center space-x-4 mt-4 sm:mt-0">
+        <a href="#" class="hover:text-neutral-400">Privacy Policy</a>
+        <span>&bull;</span>
+        <a href="#" class="hover:text-neutral-400">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== FRONTEND APPLICATION SCRIPT ==================== -->
+  <script>
+    const SUPABASE_URL = "https://frqppbrkrgbdeppjeqzh.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_fYWy0oMYUj8pbR1zcK2ptg_Q3PUYQN8";
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let ALL_PROPERTIES = [];
+    let filteredProperties = [];
+    let currentHeroIntent = 'buy';
+    let currentWhatsAppNumber = '2347062949052';
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      await fetchSiteContent();
+      await fetchProperties();
+      await fetchTeamMembers();
+    });
+
+    async function fetchSiteContent() {
+      const { data, error } = await supabase.from('site_content').select('key, value');
+      if (error || !data) return;
+
+      data.forEach(item => {
+        const el = document.getElementById(`content-${item.key}`);
+        if (el) el.innerText = item.value;
+
+        if (item.key === 'whatsapp_number') {
+          currentWhatsAppNumber = item.value.replace(/[^0-9]/g, '');
+          updateWhatsAppLinks();
+        }
+        if (item.key === 'phone_number') {
+          const fp = document.getElementById('footer-phone');
+          if (fp) fp.innerText = item.value;
+        }
+        if (item.key === 'contact_email') {
+          const fe = document.getElementById('footer-email');
+          if (fe) fe.innerText = item.value;
+        }
+        if (item.key === 'office_address') {
+          const fa = document.getElementById('footer-address');
+          if (fa) fa.innerText = item.value;
+        }
+      });
+    }
+
+    function updateWhatsAppLinks() {
+      const floatWa = document.getElementById('floating-whatsapp');
+      if (floatWa) floatWa.href = `https://wa.me/${currentWhatsAppNumber}?text=Hello%20Bezalel%20Royal%20Properties,%20I%20am%20interested%20in%20learning%20more%20about%20your%20properties.`;
+      
+      const devWa = document.getElementById('development-wa-btn');
+      if (devWa) devWa.href = `https://wa.me/${currentWhatsAppNumber}?text=Hello%20Bezalel%20Royal%20Properties,%20I%20am%20interested%20in%20the%20Royal%20Gardens%20development%20in%20Abuja.`;
+
+      const ctaTalk = document.getElementById('cta-talk-btn');
+      if (ctaTalk) ctaTalk.href = `https://wa.me/${currentWhatsAppNumber}?text=Hello%20Bezalel%20Royal%20Properties,%20I%20would%20like%20to%20speak%20with%20an%20advisor.`;
+    }
+
+    async function fetchProperties() {
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*')
+        .order('id', { ascending: false });
+
+      if (error) {
+        console.error("Database fetch error:", error);
+        return;
+      }
+
+      ALL_PROPERTIES = data || [];
+      filteredProperties = [...ALL_PROPERTIES];
+
+      renderFeaturedProperties();
+      renderSearchResults(filteredProperties);
+    }
+
+    function renderFeaturedProperties() {
+      const grid = document.getElementById('featured-properties-grid');
+      const featured = ALL_PROPERTIES.filter(p => p.is_featured).slice(0, 6);
+      grid.innerHTML = (featured.length > 0 ? featured : ALL_PROPERTIES.slice(0, 6))
+        .map(p => createPropertyCardHtml(p))
+        .join('');
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function createPropertyCardHtml(p) {
+      const bedsInfo = p.beds > 0 ? `${p.beds} Beds &bull; ` : '';
+      const bathsInfo = p.baths > 0 ? `${p.baths} Baths &bull; ` : '';
+
+      return `
+        <div class="group bg-white rounded border border-borderbeige overflow-hidden hover:border-mutedgold transition-all duration-300 flex flex-col shadow-sm">
+          <div class="relative overflow-hidden aspect-[4/3] bg-neutral-100">
+            <img src="${p.image}" 
+                 alt="${p.name}" 
+                 loading="lazy"
+                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            <span class="absolute top-3 left-3 bg-charcoal/90 text-white text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded">
+              ${p.status}
+            </span>
+          </div>
+
+          <div class="p-6 flex flex-col flex-grow">
+            <p class="text-xs text-neutral-500 uppercase tracking-wider flex items-center space-x-1 mb-1">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5 text-mutedgold"></i>
+              <span>${p.location}</span>
+            </p>
+            <h3 class="serif-heading text-xl font-bold text-charcoal mb-2">${p.name}</h3>
+            <p class="serif-heading text-2xl font-bold text-mutedgold mb-4">${p.price_formatted}</p>
+
+            <div class="text-xs text-neutral-500 py-3 border-y border-borderbeige mb-5 flex items-center space-x-1">
+              <span>${bedsInfo}${bathsInfo}${p.size}</span>
+            </div>
+
+            <div class="mt-auto">
+              <button onclick="openPropertyModal(${p.id})" class="w-full py-2.5 border border-charcoal/30 hover:border-charcoal hover:bg-charcoal hover:text-white text-charcoal text-xs font-bold uppercase tracking-wider rounded transition-all duration-200 flex items-center justify-center space-x-1">
+                <span>View Property</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function fetchTeamMembers() {
+      const { data, error } = await supabase
+        .from('team_members')
+        .select('*')
+        .order('display_order', { ascending: true });
+
+      if (error || !data) return;
+
+      const container = document.getElementById('team-members-grid');
+      container.innerHTML = data.map(m => `
+        <div class="bg-white border border-borderbeige rounded overflow-hidden shadow-sm">
+          <div class="aspect-[4/3] bg-neutral-200 overflow-hidden">
+            <img src="${m.photo_url}" 
+                 alt="${m.name}" 
+                 class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <h3 class="serif-heading text-xl font-bold text-charcoal">${m.name}</h3>
+            <p class="text-xs text-mutedgold font-semibold uppercase tracking-wider mb-2">${m.position} &bull; ${m.role_tag}</p>
+            <p class="text-xs text-neutral-600 leading-relaxed mb-4">${m.bio}</p>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-charcoal flex items-center space-x-1">
+              <span>Direct Consultation Available</span>
+            </span>
+          </div>
+        </div>
+      `).join('');
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function showView(viewName) {
+      const homeView = document.getElementById('home-view');
+      const searchView = document.getElementById('search-view');
+
+      if (viewName === 'search') {
+        homeView.classList.add('hidden');
+        searchView.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        searchView.classList.add('hidden');
+        homeView.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function toggleMobileMenu() {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    }
+
+    function setHeroIntent(intent) {
+      currentHeroIntent = intent;
+      const buyBtn = document.getElementById('hero-btn-buy');
+      const rentBtn = document.getElementById('hero-btn-rent');
+
+      if (intent === 'buy') {
+        buyBtn.className = "px-5 py-2 text-xs font-bold uppercase tracking-wider rounded bg-charcoal text-white transition-all";
+        rentBtn.className = "px-5 py-2 text-xs font-bold uppercase tracking-wider rounded bg-softbeige text-charcoal hover:bg-neutral-200 transition-all";
+      } else {
+        rentBtn.className = "px-5 py-2 text-xs font-bold uppercase tracking-wider rounded bg-charcoal text-white transition-all";
+        buyBtn.className = "px-5 py-2 text-xs font-bold uppercase tracking-wider rounded bg-softbeige text-charcoal hover:bg-neutral-200 transition-all";
+      }
+    }
+
+    function executeHeroSearch() {
+      const loc = document.getElementById('hero-loc').value;
+      const type = document.getElementById('hero-type').value;
+      
+      showView('search');
+
+      document.getElementById('filter-intent').value = currentHeroIntent === 'buy' ? 'FOR SALE' : 'FOR RENT';
+      document.getElementById('filter-location').value = loc;
+      document.getElementById('filter-type').value = type;
+
+      applyFilters();
+    }
+
+    function filterAndShowProperties(mode) {
+      showView('search');
+      resetFilters();
+      if (mode === 'buy') document.getElementById('filter-intent').value = 'FOR SALE';
+      if (mode === 'rent') document.getElementById('filter-intent').value = 'FOR RENT';
+      if (mode === 'land') document.getElementById('filter-type').value = 'Land';
+      applyFilters();
+    }
+
+    function filterByType(typeName) {
+      showView('search');
+      resetFilters();
+      document.getElementById('filter-type').value = typeName;
+      applyFilters();
+    }
+
+    function filterByLocation(cityName) {
+      showView('search');
+      resetFilters();
+      document.getElementById('filter-location').value = cityName;
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const intent = document.getElementById('filter-intent').value;
+      const location = document.getElementById('filter-location').value;
+      const type = document.getElementById('filter-type').value;
+      const beds = document.getElementById('filter-beds').value;
+
+      filteredProperties = ALL_PROPERTIES.filter(p => {
+        const matchIntent = (intent === 'all') || (p.status === intent);
+        const matchLocation = (location === 'all') || (p.city === location);
+        const matchType = (type === 'all') || (p.type === type);
+        const matchBeds = (beds === 'all') || (p.beds >= parseInt(beds));
+        return matchIntent && matchLocation && matchType && matchBeds;
+      });
+
+      renderSearchResults(filteredProperties);
+    }
+
+    function resetFilters() {
+      document.getElementById('filter-intent').value = 'all';
+      document.getElementById('filter-location').value = 'all';
+      document.getElementById('filter-type').value = 'all';
+      document.getElementById('filter-beds').value = 'all';
+      filteredProperties = [...ALL_PROPERTIES];
+      renderSearchResults(filteredProperties);
+    }
+
+    function sortProperties(order) {
+      if (order === 'newest') {
+        filteredProperties.sort((a, b) => b.id - a.id);
+      } else if (order === 'price-low') {
+        filteredProperties.sort((a, b) => a.price - b.price);
+      } else if (order === 'price-high') {
+        filteredProperties.sort((a, b) => b.price - a.price);
+      }
+      renderSearchResults(filteredProperties);
+    }
+
+    function renderSearchResults(list) {
+      const grid = document.getElementById('search-results-grid');
+      const noResults = document.getElementById('no-results');
+
+      if (list.length === 0) {
+        grid.innerHTML = '';
+        noResults.classList.remove('hidden');
+      } else {
+        noResults.classList.add('hidden');
+        grid.innerHTML = list.map(p => createPropertyCardHtml(p)).join('');
+      }
+
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function openPropertyModal(id) {
+      const p = ALL_PROPERTIES.find(item => item.id === id);
+      if (!p) return;
+
+      const modal = document.getElementById('property-modal');
+      const content = document.getElementById('modal-content');
+
+      const whatsappText = encodeURIComponent(`Hello Bezalel Royal Properties, I’m interested in the ${p.name} in ${p.location}.`);
+      const whatsappUrl = `https://wa.me/${currentWhatsAppNumber}?text=${whatsappText}`;
+
+      const bedsHtml = p.beds > 0 ? `<div class="p-3 bg-softbeige rounded text-center"><p class="text-[10px] uppercase font-bold text-neutral-500">Bedrooms</p><p class="text-sm font-bold text-charcoal">${p.beds} Beds</p></div>` : '';
+      const bathsHtml = p.baths > 0 ? `<div class="p-3 bg-softbeige rounded text-center"><p class="text-[10px] uppercase font-bold text-neutral-500">Bathrooms</p><p class="text-sm font-bold text-charcoal">${p.baths} Baths</p></div>` : '';
+      const sizeHtml = `<div class="p-3 bg-softbeige rounded text-center"><p class="text-[10px] uppercase font-bold text-neutral-500">Floor Size</p><p class="text-sm font-bold text-charcoal">${p.size}</p></div>`;
+      const landHtml = p.land_size ? `<div class="p-3 bg-softbeige rounded text-center"><p class="text-[10px] uppercase font-bold text-neutral-500">Plot Footprint</p><p class="text-sm font-bold text-charcoal">${p.land_size}</p></div>` : '';
+
+      const featuresList = Array.isArray(p.features) ? p.features : [];
+      const featuresHtml = featuresList.map(f => `<li class="flex items-center space-x-2 text-xs sm:text-sm text-neutral-700"><span class="text-mutedgold font-bold">✓</span><span>${f}</span></li>`).join('');
+
+      const galleryList = Array.isArray(p.gallery) && p.gallery.length > 0 ? p.gallery : [p.image];
+      const galleryHtml = galleryList.map(img => `
+        <img src="${img}" alt="${p.name}" class="w-full h-24 sm:h-32 object-cover rounded cursor-pointer border border-borderbeige" onclick="document.getElementById('modal-main-img').src='${img}'">
+      `).join('');
+
+      content.innerHTML = `
+        <div class="mb-6">
+          <div class="aspect-[16/9] w-full rounded overflow-hidden mb-3 bg-neutral-100">
+            <img id="modal-main-img" src="${galleryList[0]}" alt="${p.name}" class="w-full h-full object-cover">
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            ${galleryHtml}
+          </div>
+        </div>
+
+        <div class="border-b border-borderbeige pb-6 mb-6">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs uppercase tracking-widest font-bold text-mutedgold">${p.status} &bull; ${p.type}</span>
+          </div>
+          <h2 class="serif-heading text-3xl sm:text-4xl font-bold text-charcoal">${p.name}</h2>
+          <p class="text-xs text-neutral-500 flex items-center space-x-1 mt-1">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-mutedgold"></i>
+            <span>${p.location}</span>
+          </p>
+          <p class="serif-heading text-3xl font-bold text-mutedgold mt-3">${p.price_formatted}</p>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+          ${bedsHtml}
+          ${bathsHtml}
+          ${sizeHtml}
+          ${landHtml}
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 mb-8">
+          <button onclick="bookThisProperty('${p.name}')" class="flex-1 py-3.5 bg-charcoal hover:bg-mutedgold text-white text-xs font-bold uppercase tracking-widest rounded transition-all text-center">
+            Book an Inspection
+          </button>
+          <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer" class="flex-1 py-3.5 bg-[#25D366] hover:bg-[#20bd5a] text-black text-xs font-bold uppercase tracking-widest rounded transition-all flex items-center justify-center space-x-2">
+            <i data-lucide="message-circle" class="w-4 h-4 text-black"></i>
+            <span>Chat on WhatsApp</span>
+          </a>
+        </div>
+
+        <div class="mb-8">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-charcoal mb-2">About This Property</h4>
+          <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">${p.about}</p>
+        </div>
+
+        <div class="mb-8">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-charcoal mb-3">Property Features</h4>
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            ${featuresHtml}
+          </ul>
+        </div>
+
+        <div class="mb-8 bg-softbeige p-5 rounded border border-borderbeige">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-charcoal mb-1 flex items-center space-x-1.5">
+            <i data-lucide="file-check" class="w-4 h-4 text-mutedgold"></i>
+            <span>Property Documents</span>
+          </h4>
+          <p class="text-xs text-neutral-600 leading-relaxed mt-1">${p.documents}</p>
+          <p class="text-[10px] text-neutral-500 mt-2 italic">Official verification conducted directly at land registries.</p>
+        </div>
+
+        ${p.map_note ? `
+        <div class="mb-8">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-charcoal mb-2">Location Orientation</h4>
+          <div class="bg-neutral-100 border border-borderbeige rounded p-4 text-xs text-neutral-600 flex items-center space-x-2">
+            <i data-lucide="compass" class="w-4 h-4 text-mutedgold"></i>
+            <span>${p.map_note}</span>
+          </div>
+        </div>` : ''}
+
+        <div class="bg-charcoal text-white p-6 rounded text-center">
+          <h4 class="serif-heading text-2xl font-bold mb-1">Interested in This Property?</h4>
+          <p class="text-xs text-neutral-300 mb-6">Speak with a Bezalel Royal Properties representative today.</p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <button onclick="bookThisProperty('${p.name}')" class="w-full sm:w-auto px-6 py-2.5 bg-mutedgold text-charcoal text-xs font-bold uppercase tracking-wider rounded">
+              Book an Inspection
+            </button>
+            <a href="tel:+2347062949052" class="w-full sm:w-auto px-6 py-2.5 border border-white/30 text-white hover:border-white text-xs font-bold uppercase tracking-wider rounded">
+              Call Us
+            </a>
+            <a href="${whatsappUrl}" target="_blank" class="w-full sm:w-auto px-6 py-2.5 bg-[#25D366] text-black text-xs font-bold uppercase tracking-wider rounded flex items-center justify-center space-x-1">
+              <i data-lucide="message-circle" class="w-3.5 h-3.5 text-black"></i>
+              <span>WhatsApp Us</span>
+            </a>
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function closePropertyModal() {
+      document.getElementById('property-modal').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    function bookThisProperty(propertyName) {
+      closePropertyModal();
+      showView('home');
+      const inspField = document.getElementById('insp-property');
+      if (inspField) inspField.value = propertyName;
+      const section = document.getElementById('inspection');
+      if (section) section.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function handleInspectionSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('insp-name').value;
+      const phone = document.getElementById('insp-phone').value;
+      const property_name = document.getElementById('insp-property').value;
+      const inspection_date = document.getElementById('insp-date').value;
+      const inspection_time = document.getElementById('insp-time').value;
+      const message = document.getElementById('insp-msg').value;
+
+      const { error } = await supabase.from('inspection_requests').insert([{
+        name,
+        phone,
+        property_name,
+        inspection_date,
+        inspection_time,
+        message,
+        status: 'NEW'
+      }]);
+
+      if (error) {
+        console.error("Failed to record inspection in database:", error);
+      }
+
+      const whatsappMsg = `Hello Bezalel Royal Properties,%20my%20name%20is%20${encodeURIComponent(name)}%20(${encodeURIComponent(phone)}).%20I%20would%20like%20to%20book%20an%20inspection%20for%20${encodeURIComponent(property_name)}%20on%20${inspection_date}%20at%20${encodeURIComponent(inspection_time)}.%20Notes:%20${encodeURIComponent(message)}`;
+      
+      window.open(`https://wa.me/${currentWhatsAppNumber}?text=${whatsappMsg}`, '_blank');
+      document.getElementById('inspection-form').reset();
+    }
+  </script>
+</body>
+</html>
